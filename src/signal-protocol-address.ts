@@ -2,16 +2,19 @@ import { SignalProtocolAddressType } from './'
 
 export class SignalProtocolAddress implements SignalProtocolAddressType {
     static fromString(s: string): SignalProtocolAddress {
-        if (!s.match(/.*\.\d+/)) {
+        // if (!s.match(/.*\.\d+/))
+        // TODO: make test cases follow this new regex rule
+        if (!s.match(/^([0-9a-fA-F]{24})\.([0-9a-fA-F]{24})$/)) {
+            // this would fail test cases but since the system's deviceId is always an ObjectId so this is much better for the check
             throw new Error(`Invalid SignalProtocolAddress string: ${s}`)
         }
         const parts = s.split('.')
-        return new SignalProtocolAddress(parts[0], parseInt(parts[1]))
+        return new SignalProtocolAddress(parts[0], parts[1])
     }
 
     private _name: string
-    private _deviceId: number
-    constructor(_name: string, _deviceId: number) {
+    private _deviceId: string
+    constructor(_name: string, _deviceId: string) {
         this._name = _name
         this._deviceId = _deviceId
     }
@@ -21,7 +24,7 @@ export class SignalProtocolAddress implements SignalProtocolAddressType {
         return this._name
     }
 
-    get deviceId(): number {
+    get deviceId(): string {
         return this._deviceId
     }
 
@@ -30,7 +33,7 @@ export class SignalProtocolAddress implements SignalProtocolAddressType {
         return this._name
     }
 
-    getDeviceId(): number {
+    getDeviceId(): string {
         return this._deviceId
     }
 
@@ -39,6 +42,6 @@ export class SignalProtocolAddress implements SignalProtocolAddressType {
     }
 
     equals(other: SignalProtocolAddressType): boolean {
-        return other.name === this._name && other.deviceId == this._deviceId
+        return other.name === this._name && other.deviceId === this._deviceId
     }
 }
