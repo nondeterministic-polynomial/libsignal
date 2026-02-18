@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export interface SignalProtocolAddressType {
     readonly name: string
-    readonly deviceId: number
+    readonly deviceId: string
     toString: () => string
     equals: (other: SignalProtocolAddressType) => boolean
 }
@@ -52,7 +52,7 @@ export interface StorageType {
     isTrustedIdentity: (identifier: string, identityKey: ArrayBuffer, direction: Direction) => Promise<boolean>
     saveIdentity: (encodedAddress: string, publicKey: ArrayBuffer, nonblockingApproval?: boolean) => Promise<boolean>
 
-    loadPreKey: (encodedAddress: string | number) => Promise<KeyPairType | undefined>
+    loadPreKey: (keyId: number | string) => Promise<KeyPairType | undefined>
     storePreKey: (keyId: number | string, keyPair: KeyPairType) => Promise<void>
     removePreKey: (keyId: number | string) => Promise<void>
 
